@@ -18,7 +18,9 @@
   "homepage": "https://github.com/victorglimskog/movie-register#readme",
   "dependencies": {
     "babel-eslint": "^8.0.1",
-    "express": "^4.16.2"
+    "express": "^4.16.2",
+    "mysql": "^2.15.0",
+    "promisemaker": "^0.1.3"
   },
   "devDependencies": {
     "eslint": "^4.8.0",
