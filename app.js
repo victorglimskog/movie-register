@@ -1,6 +1,7 @@
 const express = require('express');
 const RestSql = require('./rest-sql.class');
 const bodyParser = require('body-parser');
+const session = require('express-session');
 
 const app = express();
 
@@ -16,6 +17,12 @@ app.use(RestSql.start({
     baseUrl: '/restapi',
     idMap: {},
     runtimeErrors: false,
+}));
+
+app.use(session({
+    secret: '&*$@&($fehfj343dhfkh334445ksd{',
+    resave: false,
+    saveUninitialized: true,
 }));
 
 app.use(express.static('./www'));

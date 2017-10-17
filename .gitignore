@@ -57,3 +57,5 @@ typings/
 # dotenv environment variables file
 .env
 
+# Private for me
+only_local/
