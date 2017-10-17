@@ -43,18 +43,18 @@ module.exports = class RestSql {
     }
 
     analyseUrl() {
-        const { url } = this.req.url;
+        const url = this.req.url;
         const method = this.req.method.toLowerCase();
-        const { baseUrl } = this.settings.baseUrl;
-        const idIndex = 1;
-        if (url.index(baseUrl) !== 0) {
+        const baseUrl = this.settings.baseUrl;
+
+        if (url.indexOf(baseUrl) !== 0) {
             this.next();
             return;
         }
 
         const urlParts = url.split(baseUrl, 2)[1].split('/');
         this.table = urlParts[0].split(';').join('');
-        this.id = urlParts[idIndex];
+        this.id = urlParts[1];
         this.method = method;
         this.idColName = this.settings.idMap[this.table] || 'id';
     }

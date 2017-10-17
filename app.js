@@ -1,7 +1,10 @@
 const express = require('express');
 const RestSql = require('./rest-sql.class');
+const bodyParser = require('body-parser');
 
 const app = express();
+
+app.use(bodyParser.json());
 
 app.use(RestSql.start({
     dbCredentials: {
