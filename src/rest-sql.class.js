@@ -58,4 +58,63 @@ module.exports = class RestSql {
         this.method = method;
         this.idColName = this.settings.idMap[this.table] || 'id';
     }
+
+    async get() {
+        // Query with or without ID
+        let result = await this.query(
+          'SELECT * FROM `' + this.table + '`' + (this.id ? ' WHERE ' + this.title + ' =?' : ''),
+          [this.id]
+        );
+
+
+       // If error
+        if (result.constructor === Error) {
+          this.res.status(500);
+        }
+
+        // No post with a id could be found
+        else if (this.id && result.length === 0) {
+          this.res.status(500);
+          return;
+        }
+
+
+        // From array to object
+        else if(this.id) {
+          result = result[0];
+        }
+
+       // Return the reslut
+        this.res.json(result);
+      }
+
+  
+	async post(){
+    
+		// convert iso date strings like "2017-10-05T11:42:46.169Z" to mysql compatible date string
+		for(let col in this.req.body){
+			let val = this.req.body[col];
+			if(val.indexOf('T') == 10 && val.indexOf('Z') == val.length-1){
+				this.req.body[col] = dateFormat(val, "yyyy-mm-dd hh:MM:ss"); // "%Y-%m-%d %H:%M:%S"
+			}
+		}
+	
+		let query = 'INSERT INTO ' + '`' + this.table + '` SET ? ';
+	
+		// Log the query in the console before we run it
+		console.log('query', query, [this.req.body, this.id]);
+
+		// run query with or without id
+		let result = await this.query(query, [this.req.body, this.id]);
+
+		// If we get an error from MySQL
+		if(result.constructor === Error){
+			this.res.status(500);
+		}
+
+		// return the result
+		this.res.json(result);
+	
+	}
 };
+
