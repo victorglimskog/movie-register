@@ -34,8 +34,8 @@ app.use(RestSql.start({
     dbCredentials: {
         host: '127.0.0.1',
         user: 'root',
-        password: 'myskul',
-        database: 'movieregister2',
+        password: 'ellavera',
+        database: 'movieregister',
     },
     baseUrl: '/restapi',
     idMap: {},

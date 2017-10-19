@@ -122,6 +122,17 @@ CREATE TABLE IF NOT EXISTS `reviews` (
 /*!40000 ALTER TABLE `reviews` DISABLE KEYS */;
 /*!40000 ALTER TABLE `reviews` ENABLE KEYS */;
 
+-- Dumping structure for tabell movieregister.roles
+CREATE TABLE IF NOT EXISTS `roles` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(50) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- Dumpar data för tabell movieregister.roles: ~0 rows (approximately)
+/*!40000 ALTER TABLE `roles` DISABLE KEYS */;
+/*!40000 ALTER TABLE `roles` ENABLE KEYS */;
+
 -- Dumping structure for tabell movieregister.users
 CREATE TABLE IF NOT EXISTS `users` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
@@ -138,6 +149,20 @@ CREATE TABLE IF NOT EXISTS `users` (
 -- Dumpar data för tabell movieregister.users: ~0 rows (approximately)
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
+
+-- Dumping structure for tabell movieregister.usersroles
+CREATE TABLE IF NOT EXISTS `usersroles` (
+  `userid` int(10) unsigned NOT NULL,
+  `roleid` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`userid`,`roleid`),
+  KEY `FK_usersroles_roles` (`roleid`),
+  CONSTRAINT `FK_usersroles_roles` FOREIGN KEY (`roleid`) REFERENCES `roles` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `FK_usersroles_users` FOREIGN KEY (`userid`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- Dumpar data för tabell movieregister.usersroles: ~0 rows (approximately)
+/*!40000 ALTER TABLE `usersroles` DISABLE KEYS */;
+/*!40000 ALTER TABLE `usersroles` ENABLE KEYS */;
 
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
 /*!40014 SET FOREIGN_KEY_CHECKS=IF(@OLD_FOREIGN_KEY_CHECKS IS NULL, 1, @OLD_FOREIGN_KEY_CHECKS) */;
