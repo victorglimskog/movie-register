@@ -11,7 +11,7 @@ app.use(RestSql.start({
     dbCredentials: {
         host: '127.0.0.1',
         user: 'root',
-        password: 'ellavera',
+        password: 'hiddenPassword',
         database: 'movieregister',
     },
     baseUrl: '/restapi',
