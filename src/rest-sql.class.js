@@ -10,8 +10,7 @@ module.exports = class RestSql {
 
     static connectToSql() {
         this.db = pm(
-            mysql.createConnection(this.settings.dbCredentials),
-            {
+            mysql.createConnection(this.settings.dbCredentials), {
                 rejectOnErrors: this.settings.runtimeErrors,
                 mapArgsToProps: {
                     query: ['rows', 'fields'],
@@ -58,32 +57,30 @@ module.exports = class RestSql {
         this.method = method;
         this.idColName = this.settings.idMap[this.table] || 'id';
     }
-	
-	async post(){
-    
-		// convert iso date strings like "2017-10-05T11:42:46.169Z" to mysql compatible date string
-		for(let col in this.req.body){
-			let val = this.req.body[col];
-			if(val.indexOf('T') == 10 && val.indexOf('Z') == val.length-1){
-				this.req.body[col] = dateFormat(val, "yyyy-mm-dd hh:MM:ss"); // "%Y-%m-%d %H:%M:%S"
-			}
-		}
-	
-		let query = 'INSERT INTO ' + '`' + this.table + '` SET ? ';
-	
-		// Log the query in the console before we run it
-		console.log('query', query, [this.req.body, this.id]);
 
-		// run query with or without id
-		let result = await this.query(query, [this.req.body, this.id]);
+    async post() {
+        // convert iso date strings like "2017-10-05T11:42:46.169Z" to mysql compatible date string
+        for (let col in this.req.body) {
+            let val = this.req.body[col];
+            if (val.indexOf('T') == 10 && val.indexOf('Z') == val.length - 1) {
+                this.req.body[col] = dateFormat(val, 'yyyy-mm-dd hh:MM:ss'); // "%Y-%m-%d %H:%M:%S"
+            }
+        }
 
-		// If we get an error from MySQL
-		if(result.constructor === Error){
-			this.res.status(500);
-		}
+        let query = 'INSERT INTO ' + '`' + this.table + '` SET ? ';
 
-		// return the result
-		this.res.json(result);
-	
-	}
+        // Log the query in the console before we run it
+        console.log('query', query, [this.req.body, this.id]);
+
+        // run query with or without id
+        let result = await this.query(query, [this.req.body, this.id]);
+
+        // If we get an error from MySQL
+        if (result.constructor === Error) {
+            this.res.status(500);
+        }
+
+        // return the result
+        this.res.json(result);
+    }
 };
