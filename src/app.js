@@ -10,17 +10,10 @@ app.use(bodyParser.json());
 
 app.use(RestSql.start({
     dbCredentials: {
-<<<<<<< HEAD
         host: process.env.DB_HOST,
         user: process.env.DB_USER,
         password: process.env.DB_PASS,
         database: process.env.DB_NAME,
-=======
-        host: '127.0.0.1',
-        user: 'root',
-        password: 'hiddenPassword',
-        database: 'movieregister',
->>>>>>> 10532ff5df654d48152f89c9eb302a295ccd5dd2
     },
     baseUrl: '/restapi',
     idMap: {},
