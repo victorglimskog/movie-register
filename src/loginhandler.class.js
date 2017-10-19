@@ -8,17 +8,16 @@ const db = pm(
         user: process.env.DB_USER,
         password: process.env.DB_PASS,
         database: process.env.DB_NAME,
-    }),
-    {
+    }), {
         rejectOnErrors: false,
         mapArgsToProps: {
-            query: ["rows", "fields"]
-        }
+            query: ['rows', 'fields'],
+        },
     }
 );
 
-async function query(queryStr,params) {
-    const result = await db.query(queryStr,params);
+async function query(queryStr, params) {
+    const result = await db.query(queryStr, params);
     return result.rows;
 }
 
@@ -36,9 +35,9 @@ module.exports = class Loginhandler {
 
         console.log(uname, pwd);
 
-        const result = await query('SELECT * FROM users WHERE username = ? AND password = ?',[uname, pwd]);
+        const result = await query('SELECT * FROM users WHERE username = ? AND password = ?', [uname, pwd]);
         console.log(result);
-        if (!result.length){
+        if (!result.length) {
             return false;
         } else {
             return true;
@@ -48,18 +47,26 @@ module.exports = class Loginhandler {
     delete() {
         this.app.delete('/login', (req, res) => {
             req.session.destroy();
-            res.status(200).json({ msg: 'Successfully logged out' });
+            res.status(200).json({
+                msg: 'Successfully logged out',
+            });
         });
     }
 
     async post() {
         this.app.post('/login', async (req, res) => {
             if (await this.credentialsCheck(req)) {
-                req.session.user = { username: req.body.username };
-                res.status(200).json({ msg: 'Successfully logged in' });
+                req.session.user = {
+                    username: req.body.username,
+                };
+                res.status(200).json({
+                    msg: 'Successfully logged in',
+                });
             } else {
                 // Try to login
-                res.status(401).json({ msg: 'Incorrect credentials' });
+                res.status(401).json({
+                    msg: 'Incorrect credentials',
+                });
             }
         });
     }
