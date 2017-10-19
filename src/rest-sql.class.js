@@ -20,7 +20,7 @@ module.exports = class RestSql {
         );
     }
 
-    static async query(q, params) {
+    async query(q, params) {
         const result = await RestSql.db.query(q, params);
         return result.rows;
     }
