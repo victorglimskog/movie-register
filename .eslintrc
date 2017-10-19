@@ -1,15 +1,16 @@
 {
-    "extends": "airbnb",
-    "parser": "babel-eslint",
+    "extends": "google",
+    "parserOptions": {
+      "ecmaVersion": 8,
+      "sourceType": "module"
+    },
     "env": {
-        "browser": true,
-        "node": true,
-        "es6": true,
-        "mocha": true
+      "node": true
     },
     "rules": {
         "indent": ["error", 4],
-        "prefer-destructuring": ["error", {"object": false, "array": false}],
-        "no-console": 0
+        "require-jsdoc": 0,
+        "max-len": 0,
+        "guard-for-in": 0
     }
 }
