@@ -50,38 +50,21 @@ module.exports = class Loginhandler {
             JOIN users ON subQ.id = users.id`,
             [uname, pwd]);
 
-<<<<<<< HEAD
         console.log(typeof result[0].roles);
         console.log(result[0].roles.split(','));
         result[0].roles = result[0].roles.split(',');
         return result;
-=======
-        const result = await query('SELECT * FROM users WHERE username = ? AND password = ?', [uname, pwd]);
-        console.log(result);
-        if (!result.length) {
-            return false;
-        } else {
-            return true;
-        }
->>>>>>> d7ca063ab616a7ad4b67cb6bab18d9e38c7cebb0
     }
 
     delete() {
         this.app.delete('/login', (req, res) => {
             req.session.destroy();
-<<<<<<< HEAD
             res.status(200).json({msg: 'Successfully logged out'});
-=======
-            res.status(200).json({
-                msg: 'Successfully logged out',
-            });
->>>>>>> d7ca063ab616a7ad4b67cb6bab18d9e38c7cebb0
         });
     }
     // clean password from userobject before resending
     async post() {
         this.app.post('/login', async (req, res) => {
-<<<<<<< HEAD
             const result = await this.credentialsCheck(req);
             const userObj = result[0];
             if (result.length) {
@@ -93,20 +76,6 @@ module.exports = class Loginhandler {
             } else {
                 // Try to login
                 res.status(401).json({msg: 'Incorrect credentials'});
-=======
-            if (await this.credentialsCheck(req)) {
-                req.session.user = {
-                    username: req.body.username,
-                };
-                res.status(200).json({
-                    msg: 'Successfully logged in',
-                });
-            } else {
-                // Try to login
-                res.status(401).json({
-                    msg: 'Incorrect credentials',
-                });
->>>>>>> d7ca063ab616a7ad4b67cb6bab18d9e38c7cebb0
             }
         });
     }
