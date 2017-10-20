@@ -59,3 +59,6 @@ typings/
 
 # Private for me
 only_local/
+
+# WebStorm 
+.idea
