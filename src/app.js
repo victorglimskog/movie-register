@@ -19,6 +19,12 @@ app.use(session({
 
 new Loginhandler(app);
 
+// app.use(auth(req,res,next))
+
+// kolla inlogg
+// kolla url and req method
+// send correct status code 403
+
 app.use(RestSql.start({
     dbCredentials: {
         host: process.env.DB_HOST,

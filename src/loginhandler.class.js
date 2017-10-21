@@ -8,17 +8,16 @@ const db = pm(
         user: process.env.DB_USER,
         password: process.env.DB_PASS,
         database: process.env.DB_NAME,
-    }),
-    {
+    }), {
         rejectOnErrors: false,
         mapArgsToProps: {
-            query: ["rows", "fields"]
-        }
+            query: ['rows', 'fields'],
+        },
     }
 );
 
-async function query(queryStr,params) {
-    const result = await db.query(queryStr,params);
+async function query(queryStr, params) {
+    const result = await db.query(queryStr, params);
     return result.rows;
 }
 
@@ -34,32 +33,49 @@ module.exports = class Loginhandler {
         const uname = req.body.username;
         const pwd = req.body.password;
 
-        console.log(uname, pwd);
+        const result = await query(
+            `SELECT * FROM
+            (SELECT users.id, GROUP_CONCAT(roles.name) AS roles
+            FROM
+                users, roles, usersroles
+            WHERE
+                users.id = usersroles.userid
+            AND
+                roles.id = usersroles.roleid
+            AND
+                users.username = ?
+            AND
+                users.password = ?
+            GROUP BY users.id) AS subQ
+            JOIN users ON subQ.id = users.id`,
+            [uname, pwd]);
 
-        const result = await query('SELECT * FROM users WHERE username = ? AND password = ?',[uname, pwd]);
-        console.log(result);
-        if (!result.length){
-            return false;
-        } else {
-            return true;
-        }
+        console.log(typeof result[0].roles);
+        console.log(result[0].roles.split(','));
+        result[0].roles = result[0].roles.split(',');
+        return result;
     }
 
     delete() {
         this.app.delete('/login', (req, res) => {
             req.session.destroy();
-            res.status(200).json({ msg: 'Successfully logged out' });
+            res.status(200).json({msg: 'Successfully logged out'});
         });
     }
-
+    // clean password from userobject before resending
     async post() {
         this.app.post('/login', async (req, res) => {
-            if (await this.credentialsCheck(req)) {
-                req.session.user = { username: req.body.username };
-                res.status(200).json({ msg: 'Successfully logged in' });
+            const result = await this.credentialsCheck(req);
+            const userObj = result[0];
+            if (result.length) {
+                req.session.user = {username: req.body.username};
+                res.status(200).json({
+                    msg: 'Successfully logged in user: ' + userObj.username,
+                    userObj: userObj,
+                });
             } else {
                 // Try to login
-                res.status(401).json({ msg: 'Incorrect credentials' });
+                res.status(401).json({msg: 'Incorrect credentials'});
             }
         });
     }
