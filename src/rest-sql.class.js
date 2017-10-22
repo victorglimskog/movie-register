@@ -66,7 +66,6 @@ module.exports = class RestSql {
           [this.id]
         );
 
-
        // If error
         if (result.constructor === Error) {
           this.res.status(500);
@@ -98,7 +97,7 @@ module.exports = class RestSql {
 				this.req.body[col] = dateFormat(val, "yyyy-mm-dd hh:MM:ss"); // "%Y-%m-%d %H:%M:%S"
 			}
 		}
-	
+
 		let query = 'INSERT INTO ' + '`' + this.table + '` SET ? ';
 	
 		// Log the query in the console before we run it
