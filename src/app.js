@@ -36,8 +36,6 @@ app.use(RestSql.start({
     runtimeErrors: false,
 }));
 
-app.get('/secretData', (req, res) => res.status(200).send('Welcome, you are now logged in'));
-
 app.use(express.static('./www'));
 
 app.listen(3000, () => {
