@@ -14,5 +14,9 @@ module.exports = async function(userId) {
     });
 
     let addBlockRole = `
-    `
+        INSERT INTO usersroles (userid, roleid) VALUES (?, '1');
+    `;
+
+    let result = await query(addBlockRole, userId);
+    console.log(result);
 };
