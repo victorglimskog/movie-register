@@ -49,8 +49,8 @@ app.listen(3000, () => {
     console.log('Up and running at Tannhäuser Gate 3k');
 });
 
-createData();
-highestRankedMovie();
+// createData();
+// highestRankedMovie();
 
 // TO BE CONTINUED
 // searchMovie("Return of the Mutant Zombies II");
