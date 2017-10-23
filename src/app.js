@@ -19,6 +19,7 @@ app.use(session({
 
 new Loginhandler(app);
 
+app.use(auth);
 // app.use(auth(req,res,next))
 
 // kolla inlogg
@@ -37,7 +38,7 @@ app.use(RestSql.start({
     runtimeErrors: false,
 }));
 
-app.get('/secretData', auth, (req, res) => res.status(200).send('Welcome, you are now logged in'));
+app.get('/secretData', (req, res) => res.status(200).send('Welcome, you are now logged in'));
 
 app.use(express.static('./www'));
 
@@ -334,30 +335,30 @@ async function createDummyData() {
 
 // Get movies based on searching phrase
 async function searchMovie(string) {
-	
-	// Look for movies with similar name 
+
+	// Look for movies with similar name
     let movies = await query('SELECT * FROM movies WHERE title LIKE "%'+string+'%"');
-	
+
 	// If we had less then 5 results in movieSecondPart
 	// look if the string match anything in actors
 	if(movies.length && movies.length < 5 || !movies.length){
-		
+
 		// how all words from the input string
 		let words = string.split(' ');
 		if(words.length == 2){
 			let stringName1 = words[0];
 			let stringName2 = words[0];
 			let actorsFirstSearch = await query('SELECT * FROM actors WHERE firstname LIKE "%'+stringName1+'%" OR lastname LIKE "%'+stringName2+'%" LIMIT 5');
-			
+
 			if(movies.length && movies.length < 5 || !movies.length){
-				let actorsSecondSearch = await query('SELECT * FROM actors WHERE firstname LIKE "%'+stringName2+'%" OR lastname LIKE "%'+stringName1+'%" LIMIT 5');	
-			}	
+				let actorsSecondSearch = await query('SELECT * FROM actors WHERE firstname LIKE "%'+stringName2+'%" OR lastname LIKE "%'+stringName1+'%" LIMIT 5');
+			}
 		}
-		
+
 	}
-	
-	// LIMIT 5? of movies, movies of actorsFirstSearch, movies of actorsSecondSearch, 
-	
+
+	// LIMIT 5? of movies, movies of actorsFirstSearch, movies of actorsSecondSearch,
+
 	return movies;
 }
 
@@ -368,4 +369,3 @@ async function searchMovie(string) {
 
 
 //createDummyData();
-
