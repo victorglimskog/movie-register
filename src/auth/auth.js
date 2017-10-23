@@ -22,7 +22,6 @@ function userAllowedRoute(urlProps) {
     if ( disallowedRoutes.includes(urlProps.table)) {
         return false;
     }
-    console.log('its ok');
     return true;
 }
 
@@ -30,7 +29,6 @@ function auth(req, res, next) {
     const urlProps = analyseUrl(req);
     const session = req.session;
     const user = req.session ? req.session.user : null;
-    console.log(urlProps);
 
     // allow all access if not accessing restapi
     if (urlProps.baseUrl !== 'restapi') {
@@ -41,17 +39,14 @@ function auth(req, res, next) {
     if (session && user) {
         // Allow Admin to do as he/she damn well pleases
         if (user.roles.includes('admin')) {
-            console.log('Admin time!');
             return next();
         } else if (user.roles.includes('user')) {
-            console.log('User time');
             if (userAllowedRoute(urlProps)) {
-                console.log('OK!');
                 return next();
             }
         }
     }
-    return res.status(401).json({msg: 'unauthorized'});
+    return res.status(403).json({msg: 'unauthorized'});
 }
 
 module.exports = auth;
