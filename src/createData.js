@@ -1,3 +1,5 @@
+const query = require('./query');
+
 let firstNames = [
     'Anna',
     'Charlie',
@@ -49,7 +51,7 @@ let movieLastPart = [
     'Pizzas',
 ];
 
-let movieNum = ['', 'II', 'III', 'IV'];
+let movieNum = ['I', 'II', 'III', 'IV'];
 let years = [1970, 1981, 1995, 2003, 2014, 2015, 2016];
 let scores = ['1', '2', '3', '4', '5'];
 
@@ -64,7 +66,7 @@ let descriptions = [
     'The world has changed a lot, almost everything is going down the shitters.',
     'A lonely person that suddenly finds love.',
     'After the death of his father, the King of Denmark, returns home to the isolated, technologically advanced Skåne nation to succeed to the throne and take his rightful place as king.',
-    'Bodies are turning up around the city, each having met a uniquely gruesome demise. As the investigation proceeds, evidence points to one suspect.'
+    'Bodies are turning up around the city, each having met a uniquely gruesome demise. As the investigation proceeds, evidence points to one suspect.',
 ];
 
 let roles = [
@@ -73,38 +75,36 @@ let roles = [
     'admin',
 ];
 
-let users = [
-    {
-        username: 'admin',
-        email: 'admin@movieregister.com',
-        password: '1234',
-    },
-    {
-        username: 'user1',
-        email: 'user1@movieregister.com',
-        password: '1234',
-    },
-    {
-        username: 'user2',
-        email: 'user2@movieregister.com',
-        password: '1234',
-    },
-    {
-        username: 'user3',
-        email: 'user3@movieregister.com',
-        password: '1234',
-    },
-    {
-        username: 'blockedUser',
-        email: 'blockedUser@movieregister.com',
-        password: '1234',
-    },
-];
+let users = [{
+    username: 'admin',
+    email: 'admin@movieregister.com',
+    password: '1234',
+},
+{
+    username: 'user1',
+    email: 'user1@movieregister.com',
+    password: '1234',
+},
+{
+    username: 'user2',
+    email: 'user2@movieregister.com',
+    password: '1234',
+},
+{
+    username: 'user3',
+    email: 'user3@movieregister.com',
+    password: '1234',
+},
+{
+    username: 'blockedUser',
+    email: 'blockedUser@movieregister.com',
+    password: '1234',
+}];
 
 let createdMovies = [];
 
 function randomItem(arr) {
-    return arr[Math.floor(Math.random()*arr.length)];
+    return arr[Math.floor(Math.random() * arr.length)];
 }
 
 function createMovie() {
@@ -135,11 +135,7 @@ async function deleteDummyData() {
     await query('DELETE FROM users');
 }
 
-async function deleteUsers() {
-    await query('DELETE FROM users');
-}
-
-async function createDummyData() {
+module.exports = async () => {
     await deleteDummyData();
 
     // add users
@@ -155,17 +151,29 @@ async function createDummyData() {
 
     // add roles
     for (let i = 0; i < roles.length; i++) {
-        let role = {name: roles[i]};
+        let role = {
+            name: roles[i],
+        };
 
         await query('INSERT INTO roles SET ?', role);
     }
+
+    // get all userIds
+    let userIds = (await query('SELECT id FROM users WHERE username <> "admin"')).map((x) => x.id);
+
+    let adminIds = (await query('SELECT id FROM users WHERE username = "admin"')).map((x) => x.id);
+    let blockedIds = (await query('SELECT id FROM users WHERE username = "blockedUser"')).map((x) => x.id);
+
+    let roleBlockedId = (await query('SELECT id FROM roles WHERE name = "blocked"')).map((x) => x.id);
+    let roleUserId = (await query('SELECT id FROM roles WHERE name = "user"')).map((x) => x.id);
+    let roleAdminId = (await query('SELECT id FROM roles WHERE name = "admin"')).map((x) => x.id);
 
     // add 100 actors
     for (let i = 0; i < 50; i++) {
         let actor = createPerson();
         actor.id = i + 1;
         actor.vnumber = 1;
-        actor.editorid = randomItem(usersIds);
+        actor.editorid = randomItem(userIds);
 
         await query('INSERT INTO actors SET ?', actor);
     }
@@ -174,7 +182,7 @@ async function createDummyData() {
         let director = createPerson();
         director.id = i + 1;
         director.vnumber = 1;
-        director.editorid = randomItem(usersIds);
+        director.editorid = randomItem(userIds);
 
         await query('INSERT INTO directors SET ?', director);
     }
@@ -187,24 +195,15 @@ async function createDummyData() {
         await query('INSERT INTO movies SET ?', newMovie);
     }
 
-    // get all userIds
-    let userIds = (await query('SELECT id, username FROM users WHERE username <> "admin"')).map((x)=>x.id);
-
-    let adminIds = (await query('SELECT id, username FROM users WHERE username = "admin"')).map((x)=>x.id);
-    let blockedIds = (await query('SELECT id, username FROM users WHERE username = "blockedUser"')).map((x)=>x.id);
-
-    let roleBlockedId = (await query('SELECT id, name FROM users WHERE name = "blocked"')).map((x)=>x.id);
-    let roleUserId = (await query('SELECT id, name FROM users WHERE name = "user"')).map((x)=>x.id);
-    let roleAdminId = (await query('SELECT id, name FROM users WHERE name = "admin"')).map((x)=>x.id);
 
     // get all movieIds
-    let movieIds = (await query('SELECT id FROM movies')).map((x)=>x.id);
+    let movieIds = (await query('SELECT id FROM movies')).map((x) => x.id);
 
     // get all actorIds
-    let actorIds = (await query('SELECT id FROM actors')).map((x)=>x.id);
+    let actorIds = (await query('SELECT id FROM actors')).map((x) => x.id);
 
     // get all directorIds
-    let directorsIds = (await query('SELECT id FROM directors')).map((x)=>x.id);
+    let directorsIds = (await query('SELECT id FROM directors')).map((x) => x.id);
 
     // give role to users
     for (let userId of userIds) {
@@ -236,7 +235,7 @@ async function createDummyData() {
             movieid: movieId,
             vnumber: 1,
             text: randomItem(descriptions),
-            editorid: randomItem(usersIds),
+            editorid: randomItem(userIds),
         });
     }
 
@@ -251,7 +250,7 @@ async function createDummyData() {
     // generate 3 to 5 actors per movie
     for (let movieId of movieIds) {
         let actorIdsUsed = {};
-        for (i = 0; i < 3 + Math.floor(Math.random()*3); i++) {
+        for (i = 0; i < 3 + Math.floor(Math.random() * 3); i++) {
             let actorId;
             do {
                 actorId = randomItem(actorIds);
@@ -266,7 +265,7 @@ async function createDummyData() {
 
     // generate 2 to 4 reviews per movie
     for (let movieId of movieIds) {
-        for (i = 0; i < 2 + Math.floor(Math.random()*2); i++) {
+        for (i = 0; i < 2 + Math.floor(Math.random() * 2); i++) {
             let review = {};
             review.text = randomItem(reviews);
             review.score = randomItem(scores);
@@ -276,8 +275,5 @@ async function createDummyData() {
             await query('INSERT INTO reviews SET ? ', review);
         }
     }
-
     process.exit();
-}
-
-deleteUsers();
+};
