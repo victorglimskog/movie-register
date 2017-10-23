@@ -50,8 +50,6 @@ module.exports = class Loginhandler {
             JOIN users ON subQ.id = users.id`,
             [uname, pwd]);
 
-        console.log(typeof result[0].roles);
-        console.log(result[0].roles.split(','));
         result[0].roles = result[0].roles.split(',');
         return result;
     }
@@ -66,9 +64,14 @@ module.exports = class Loginhandler {
     async post() {
         this.app.post('/login', async (req, res) => {
             const result = await this.credentialsCheck(req);
-            const userObj = result[0];
+            console.log();
+            const userObj = {
+                id: result[0].id,
+                username: result[0].username,
+                roles: result[0].roles,
+            };
             if (result.length) {
-                req.session.user = {username: req.body.username};
+                req.session.user = userObj;
                 res.status(200).json({
                     msg: 'Successfully logged in user: ' + userObj.username,
                     userObj: userObj,
