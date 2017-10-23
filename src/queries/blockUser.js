@@ -3,16 +3,17 @@ const query = require('../query');
 module.exports = async function(userId) {
     const tables = ['actors', 'descriptions', 'directors', 'reviews'];
 
-    this.tables.forEach((table, index) => {
+    tables.forEach(async function (table) {
+        let deleteEditsByUser = `
+            DELETE FROM ${table}
+            WHERE editorid = ?
+        `;
 
-        let findEditsByUser = `
-            SELECT * FROM ${table}
-                WHERE editorid = ?
-            `;
-
-
-        console.log("query", query);
-        result = await query(findEditsByUser, userId);
+        let result = await query(deleteEditsByUser, userId);
         console.log(result);
-    }
+    });
+
+    let addBlockRole = `
+
+    `
 };

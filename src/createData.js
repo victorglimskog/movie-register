@@ -152,6 +152,7 @@ module.exports = async () => {
     // add roles
     for (let i = 0; i < roles.length; i++) {
         let role = {
+            id: i + 1,
             name: roles[i],
         };
 
