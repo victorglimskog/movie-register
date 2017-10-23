@@ -14,6 +14,5 @@ module.exports = async function(userId) {
     });
 
     let addBlockRole = `
-
     `
 };

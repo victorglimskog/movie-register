@@ -46,6 +46,4 @@ app.listen(3000, () => {
 // createData();
 // highestRankedMovie();
 // blockUser(userToBlockId);
-
-// TO BE CONTINUED
-// searchMovie("Return of the Mutant Zombies II");
+// searchMovies("Mutant", 5);	// searchstring / limit

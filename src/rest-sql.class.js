@@ -19,10 +19,11 @@ module.exports = class RestSql {
             },
         );
 
-        if (this.settings.runtimeErrors) {
-            // if runtime error
-            console.log(this.settings.runtimeErrors);
-        }
+		if(this.settings.runtimeErrors){
+			// if runetime error
+			console.log("Error: ",this.settings.runtimeErrors);
+		}
+
     }
 
     async query(q, params) {
