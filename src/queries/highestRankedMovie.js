@@ -6,5 +6,5 @@ module.exports = async function() {
         LIMIT 1
     `;
     result = await query(question);
-    console.log(result);
+    console.log("Highest ranked movies", result);
 };

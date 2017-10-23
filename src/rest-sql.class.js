@@ -21,7 +21,7 @@ module.exports = class RestSql {
 	
 		if(this.settings.runtimeErrors){
 			// if runetime error
-			console.log(this.settings.runtimeErrors);
+			console.log("Error: ",this.settings.runtimeErrors);
 		}
     }
 

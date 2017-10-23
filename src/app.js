@@ -51,9 +51,10 @@ app.listen(3000, () => {
 
 
 
-createData();
+//createData();
 highestRankedMovie();
 
 // TO BE CONTINUED
-// searchMovie("Return of the Mutant Zombies II");
+// searchstring / limit
+// searchMovies("Mutant", 5);
 
