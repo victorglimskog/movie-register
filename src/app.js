@@ -4,11 +4,12 @@ const RestSql = require('./rest-sql.class');
 const bodyParser = require('body-parser');
 const session = require('express-session');
 const createData = require('./createData');
-const Loginhandler = require('./loginhandler.class');
+const Loginhandler = require('./auth/loginhandler.class');
 const highestRankedMovie = require('./queries/highestRankedMovie');
 const searchMovies = require('./queries/searchMovies');
+const blockUser = require('./queries/blockUser');
 
-const auth = require('./auth');
+const auth = require('./auth/auth');
 
 const app = express();
 
@@ -22,11 +23,7 @@ app.use(session({
 
 new Loginhandler(app);
 
-// app.use(auth(req,res,next))
-
-// kolla inlogg
-// kolla url and req method
-// send correct status code 403
+app.use(auth);
 
 app.use(RestSql.start({
     dbCredentials: {
@@ -40,8 +37,6 @@ app.use(RestSql.start({
     runtimeErrors: false,
 }));
 
-app.get('/secretData', auth, (req, res) => res.status(200).send('Welcome, you are now logged in'));
-
 app.use(express.static('./www'));
 
 app.listen(3000, () => {
@@ -50,11 +45,7 @@ app.listen(3000, () => {
 
 
 
-
 //createData();
 highestRankedMovie();
 
-// TO BE CONTINUED
-// searchstring / limit
-// searchMovies("Mutant", 5);
-
+// searchMovies("Mutant", 5);	// searchstring / limit
