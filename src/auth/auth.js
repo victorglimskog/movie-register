@@ -15,9 +15,15 @@ function analyseUrl(req) {
 
 function userAllowedRoute(urlProps) {
     const disallowedRoutes = ['users', 'roles', 'usersroles'];
+    const readOnlyTables = ['movies'];
 
     if (urlProps.method === 'delete') {
         return false;
+    }
+    if (readOnlyTables.includes(urlProps.table)) {
+        if ( urlProps.method !== 'get') {
+            return false;
+        }
     }
     if ( disallowedRoutes.includes(urlProps.table)) {
         return false;
