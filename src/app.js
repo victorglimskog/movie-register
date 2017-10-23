@@ -7,6 +7,7 @@ const createData = require('./createData');
 const Loginhandler = require('./loginhandler.class');
 const highestRankedMovie = require('./queries/highestRankedMovie');
 const searchMovies = require('./queries/searchMovies');
+const blockUser = require('./queries/blockUser');
 
 const auth = require('./auth');
 
@@ -51,8 +52,9 @@ app.listen(3000, () => {
 
 
 
-createData();
+// createData();
 highestRankedMovie();
+// blockUser();
 
 // TO BE CONTINUED
 // searchMovie("Return of the Mutant Zombies II");
