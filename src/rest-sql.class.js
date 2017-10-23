@@ -18,6 +18,11 @@ module.exports = class RestSql {
                 },
             },
         );
+	
+		if(this.settings.runtimeErrors){
+			// if runetime error
+			console.log(this.settings.runtimeErrors);
+		}
     }
 
     async query(q, params) {
@@ -88,6 +93,7 @@ module.exports = class RestSql {
       }
 
   
+	
 	async post(){
     
 		// convert iso date strings like "2017-10-05T11:42:46.169Z" to mysql compatible date string

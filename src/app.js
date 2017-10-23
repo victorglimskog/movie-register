@@ -334,38 +334,58 @@ async function createDummyData() {
 
 // Get movies based on searching phrase
 async function searchMovie(string) {
+
+    let words = string.split(' ');
+
+    // Look for movies with similar name 
+    let movies = await query('SELECT * FROM movies WHERE title LIKE "%'+string+'%" LIMIT 5');
 	
-	// Look for movies with similar name 
-    let movies = await query('SELECT * FROM movies WHERE title LIKE "%'+string+'%"');
+    console.log(movies);
 	
-	// If we had less then 5 results in movieSecondPart
+    // If we had less then 5 results in movieSecondPart
 	// look if the string match anything in actors
-	if(movies.length && movies.length < 5 || !movies.length){
+    if(movies.length && movies.length < 5 || !movies.length){
 		
-		// how all words from the input string
-		let words = string.split(' ');
+        // how many words from the input string
+        // Loop all words and look for the words in actors firstname + lastname
+		let actors = [];
+        for(word in words){
+            word = words[word];
+            let actor = await query('SELECT id FROM actors WHERE firstname LIKE "%'+word+'%" OR lastname LIKE "%'+word+'%" LIMIT 5');
+			if(actor){actors.push(actor)};
+        }
+		
+		console.log("actors", actors);
+
+		/*
+        // if two words, its probably "firstname lastname"
 		if(words.length == 2){
 			let stringName1 = words[0];
-			let stringName2 = words[0];
+			let stringName2 = words[1];
 			let actorsFirstSearch = await query('SELECT * FROM actors WHERE firstname LIKE "%'+stringName1+'%" OR lastname LIKE "%'+stringName2+'%" LIMIT 5');
-			
-			if(movies.length && movies.length < 5 || !movies.length){
+
+			// Reversed: Name is probably backwards "lastname firstname"
+			if(actorsFirstSearch.length && actorsFirstSearch.length < 5 || !movies.length){
 				let actorsSecondSearch = await query('SELECT * FROM actors WHERE firstname LIKE "%'+stringName2+'%" OR lastname LIKE "%'+stringName1+'%" LIMIT 5');	
-			}	
+			}
 		}
+		*/
 		
 	}
+
+
+
+
+
+
+    // LIMIT 5? of 1. movies, 2. movies of actorsFirstSearch, 3. movies of actorsSecondSearch,
 	
-	// LIMIT 5? of movies, movies of actorsFirstSearch, movies of actorsSecondSearch, 
-	
-	return movies;
+    return movies;
 }
 
 // TO BE CONTINUED
-//searchMovie("Return of the Mutant Zombies II");
+//searchMovie("Back to the Mutant Snakes");
 
 
 
-
-//createDummyData();
-
+createDummyData();
