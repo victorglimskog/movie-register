@@ -3,8 +3,10 @@ const express = require('express');
 const RestSql = require('./rest-sql.class');
 const bodyParser = require('body-parser');
 const session = require('express-session');
-const createData = require('./createData');
 const Loginhandler = require('./auth/loginhandler.class');
+const createData = require('./createData');
+
+// queries
 const highestRankedMovie = require('./queries/highestRankedMovie');
 const searchMovies = require('./queries/searchMovies');
 const blockUser = require('./queries/blockUser');
