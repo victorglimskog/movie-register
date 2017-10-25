@@ -73,12 +73,12 @@ module.exports = class Loginhandler {
             if (result.length) {
                 req.session.user = userObj;
                 res.status(200).json({
-                    msg: 'Successfully logged in user: ' + userObj.username,
+                    msg: 'Successfully logged in user: ' + userObj.username + ' ♪☆＼(^０^＼) ♪(／^-^)／☆♪',
                     userObj: userObj,
                 });
             } else {
                 // Try to login
-                res.status(401).json({msg: 'Incorrect credentials'});
+                res.status(401).json({msg: 'Incorrect credentials! (╯°□°)╯︵ slɐᴉʇuǝpǝɹɔ'});
             }
         });
     }

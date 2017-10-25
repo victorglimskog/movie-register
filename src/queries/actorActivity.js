@@ -1,21 +1,16 @@
 const query = require('../query');
 
 module.exports = async function(activity) {
-
-    let mostActive = activity !== 'leastActive' ?  true : false;
+    let order = activity !== 'leastActive' ? 'ASC' : 'DESC';
 
     let selectGroupBy = `
-        SELECT COUNT(movieid)
+        SELECT actorid, firstname, lastname, COUNT(movieid) AS moviesActedIn
         FROM actorsmovies
+        JOIN actors ON (actors.id = actorsmovies.actorid)
         GROUP BY actorid
+        ORDER BY moviesActedIn ${order}
     `;
 
     let result = await query(selectGroupBy);
     console.log(result);
 };
-
-
-// mysql> SELECT student.student_name,COUNT(*)
-//        FROM student,course
-//        WHERE student.student_id=course.student_id
-//        GROUP BY student_name;

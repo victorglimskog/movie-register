@@ -11,6 +11,56 @@ let firstNames = [
     'Morgan',
     'Marie',
     'Claude',
+    'Kari',
+    'Sonja',
+    'Yan',
+    'Kizzy',
+    'Miles',
+    'Bonny',
+    'Garret',
+    'Barbara',
+    'Sara',
+    'Royce',
+    'Saundra',
+    'Whitley',
+    'Myrtle',
+    'Estell',
+    'Leif',
+    'Corliss',
+    'Peggie',
+    'Evelyne',
+    'Odelia',
+    'Dylan',
+    'Anton',
+    'Kristy',
+    'Brandy',
+    'Linn',
+    'Rosann',
+    'Zora',
+    'Celesta',
+    'Coreen',
+    'Myrle',
+    'Valeria',
+    'Elizabet',
+    'Freeda',
+    'Brittany',
+    'Gracia',
+    'Elina',
+    'Maisie',
+    'Reyes',
+    'Jeremy',
+    'Tawny',
+    'Korey',
+    'Lorita',
+    'Willodean',
+    'Lucienne',
+    'Zackary',
+    'Millie',
+    'Johna',
+    'Lorina',
+    'Twila',
+    'Nicolette',
+    'Lekisha',
 ];
 
 let lastNames = [
@@ -24,6 +74,56 @@ let lastNames = [
     'Bergman',
     'Hamilton',
     'Janson',
+    'Key',
+    'Leon',
+    'Lindsey',
+    'Contreras',
+    'Bishop',
+    'Conley',
+    'Whitney',
+    'Whitehead',
+    'Lang',
+    'Padilla',
+    'Hayden',
+    'Dillon',
+    'Briggs',
+    'Coffey',
+    'Hull',
+    'Newman',
+    'Tran',
+    'Lyons',
+    'Clarke',
+    'Conner',
+    'Beltran',
+    'Beasley',
+    'Yoder',
+    'Clements',
+    'Le',
+    'Hampton',
+    'House',
+    'Massey',
+    'Hanna',
+    'Jordan',
+    'Solis',
+    'Navarro',
+    'Hammond',
+    'Melendez',
+    'Maxwell',
+    'Castro',
+    'Matthews',
+    'Stanley',
+    'Scott',
+    'Aguilar',
+    'Mcintosh',
+    'Wall',
+    'Brock',
+    'Washington',
+    'Osborne',
+    'Santos',
+    'Cortez',
+    'Paul',
+    'Pitts',
+    'Mooney',
 ];
 
 let movieFirstPart = [
@@ -31,6 +131,9 @@ let movieFirstPart = [
     'Return of the',
     'Back to the',
     'The remains of the',
+    'The small',
+    'Dangerous',
+    'Scary',
 ];
 
 let movieSecondPart = [
@@ -39,6 +142,15 @@ let movieSecondPart = [
     'Teenage',
     'Space',
     'College',
+    'Disagreeable',
+    'Faithful',
+    'Puffy',
+    'Dusty',
+    'Guiltless',
+    'Weary',
+    'Blue',
+    'Thick',
+    'Colossal',
 ];
 
 let movieLastPart = [
@@ -49,6 +161,16 @@ let movieLastPart = [
     'Vampires',
     'Zombies',
     'Pizzas',
+    'Sounds',
+    'Queens',
+    'Potatos',
+    'Bats',
+    'Bottles',
+    'Sofas',
+    'Wheels',
+    'Tanks',
+    'Dinosaurs',
+    'Childs',
 ];
 
 let movieNum = ['I', 'II', 'III', 'IV'];
@@ -102,6 +224,7 @@ let users = [{
 }];
 
 let createdMovies = [];
+let createdPeople = [];
 
 function randomItem(arr) {
     return arr[Math.floor(Math.random() * arr.length)];
@@ -120,10 +243,17 @@ function createMovie() {
 }
 
 function createPerson() {
-    return {
-        firstname: randomItem(firstNames),
-        lastname: randomItem(lastNames),
-    };
+    let names = {};
+
+    do {
+        names = {
+            firstname: randomItem(firstNames),
+            lastname: randomItem(lastNames),
+        }
+    } while (createdPeople.indexOf(names.firstname + names.lastname) >= 0);
+
+    createdPeople.push(names.fistname + names.lastname);
+    return names;
 }
 
 async function deleteDummyData() {
