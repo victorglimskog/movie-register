@@ -3,9 +3,12 @@ const express = require('express');
 const RestSql = require('./rest-sql.class');
 const bodyParser = require('body-parser');
 const session = require('express-session');
-const createData = require('./createData');
 const Loginhandler = require('./auth/loginhandler.class');
+const createData = require('./createData');
+
+// queries
 const highestRankedMovie = require('./queries/highestRankedMovie');
+const lowestRankedMovie = require('./queries/lowestRankedMovie');
 const searchMovies = require('./queries/searchMovies');
 const blockUser = require('./queries/blockUser');
 
@@ -45,6 +48,7 @@ app.listen(3000, () => {
 
 // createData();
 // highestRankedMovie();
+// lowestRankedMovie();
 // blockUser(userToBlockId);
 // searchMovies("Mutant", 5);   // searchstring / limit
 // actorActivity(mostActive || leastActive);

@@ -5,9 +5,9 @@ module.exports = async () => {
         SELECT year, title, total as totalScore
         FROM totalscores
         WHERE total =
-            (SELECT MAX(total) FROM totalscores)
+            (SELECT MIN(total) FROM totalscores)
     `;
     result = await query(q);
-    console.log('Highest ranked movies', result);
+    console.log('Lowest ranked movies', result);
     return result;
 };
