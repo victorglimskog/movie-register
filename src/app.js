@@ -37,7 +37,9 @@ app.use(RestSql.start({
         database: process.env.DB_NAME,
     },
     baseUrl: '/restapi',
-    idMap: {},
+    idMap: {
+        descriptions: "movieid"
+    },
     runtimeErrors: false,
 }));
 

@@ -85,28 +85,59 @@ module.exports = class RestSql {
 
 
     async post() {
-        // convert iso date strings like "2017-10-05T11:42:46.169Z" to mysql compatible date string
-        for (let col in this.req.body) {
-            let val = this.req.body[col];
-            if (val.indexOf('T') == 10 && val.indexOf('Z') == val.length-1) {
-                this.req.body[col] = dateFormat(val, 'yyyy-mm-dd hh:MM:ss'); // "%Y-%m-%d %H:%M:%S"
+        let result;
+
+        //tables with versions
+        if (this.table == "descriptions" || this.table == "directors" || this.table == "actors") {
+            this.req.body.movieid ? this.id = this.req.body.movieid : {};
+            // if there is an id, its an update of an post
+            if (this.id) {
+                let post = (await this.query(`SELECT * FROM ${this.table} WHERE ${this.idColName} = ${this.id}`))[0];
+
+                delete post.movieid;
+                delete post.vnumber;
+                delete post.timestamp;
+
+                let props = Object.assign({}, post, this.req.body);
+                let keys = Object.keys(props);
+                let vals = Object.values(props);
+
+                let query = `INSERT INTO ${this.table} SET
+                    vnumber = IFNULL((SELECT MAX(vnumber) + 1 FROM ${this.table} AS ac WHERE ${this.idColName} = ${this.id}), 1)`
+
+                for(let key of keys) {
+                    query += `, ${key} = ?`;
+                }
+
+                result = await this.query(query, vals);
+            }
+            // if not, make an auto-incremented id and version number 1
+            else {
+               result = await this.query(`INSERT INTO ${this.table} SET
+                   id = IFNULL((SELECT MAX(id) + 1 FROM ${this.table} AS tb), 1),
+                   vnumber = 1,
+                   ?`,
+                   this.req.body,
+               );
+           }
+       }
+       else {
+            let query = 'INSERT INTO ' + '`' + this.table + '` SET ? ';
+            // Log the query in the console before we run it
+            console.log('query', query, [this.req.body, this.id]);
+            // run query with or without id
+            result = await this.query(query, [this.req.body, this.id]);
+            // If we get an error from MySQL
+            if (result.constructor === Error){
+            this.res.status(500);
             }
         }
-
-        let query = 'INSERT INTO ' + '`' + this.table + '` SET ? ';
-
-        // Log the query in the console before we run it
-        console.log('query', query, [this.req.body, this.id]);
-
-        // run query with or without id
-        let result = await this.query(query, [this.req.body, this.id]);
-
-        // If we get an error from MySQL
-        if (result.constructor === Error) {
-            this.res.status(500);
-        }
-
         // return the result
         this.res.json(result);
+    }
+
+    async delete() {
+        const result = await this.query();
+        return result;
     }
 };
