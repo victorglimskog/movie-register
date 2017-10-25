@@ -276,5 +276,21 @@ module.exports = async () => {
             await query('INSERT INTO reviews SET ? ', review);
         }
     }
+
+    // Create views we need in db
+    // View totalscores is needed to get
+    // highest and lowest ranked movie by reviews score
+    (async function() {
+        const viewTotalScores = `
+            CREATE VIEW totalscores AS
+                SELECT m.title, SUM(r.score) as total
+                FROM movies as m, reviews as r
+                WHERE m.id = r.movieid
+                GROUP BY m.title
+                ORDER BY total desc;
+        `;
+        await query(viewTotalScores);
+    })();
+    // exit node process in terminal
     process.exit();
 };
