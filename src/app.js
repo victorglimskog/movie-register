@@ -11,6 +11,7 @@ const highestRankedMovie = require('./queries/highestRankedMovie');
 const lowestRankedMovie = require('./queries/lowestRankedMovie');
 const searchMovies = require('./queries/searchMovies');
 const blockUser = require('./queries/blockUser');
+const actorActivity = require('./queries/actorActivity');
 
 const auth = require('./auth/auth');
 
@@ -45,7 +46,7 @@ app.use(RestSql.start({
 app.use(express.static('./www'));
 
 app.listen(3000, () => {
-    console.log('Up and running at Tannhäuser Gate 3k');
+    console.log('Server is running on... ╰( ͡° ͜ʖ ͡° )── PORT: 3000');
 });
 
 // createData();
@@ -53,4 +54,4 @@ app.listen(3000, () => {
 // lowestRankedMovie();
 // blockUser(userToBlockId);
 // searchMovies("Mutant", 5);   // searchstring / limit
-// actorActivity(mostActive || leastActive);
+// actorActivity('leastActive'); // if no inparam you get the most active (otherwise give the function 'leastActive')

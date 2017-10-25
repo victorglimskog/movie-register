@@ -1,21 +1,16 @@
 const query = require('../query');
 
 module.exports = async function(activity) {
+    let order = activity !== 'leastActive' ? 'ASC' : 'DESC';
 
-    tables.forEach(async function (table) {
-        let deleteEditsByUser = `
-            DELETE FROM ${table}
-            WHERE editorid = ?
-        `;
-
-        let result = await query(deleteEditsByUser, userId);
-        console.log(result);
-    });
-
-    let addBlockRole = `
-        INSERT INTO usersroles (userid, roleid) VALUES (?, '1');
+    let selectGroupBy = `
+        SELECT actorid, firstname, lastname, COUNT(movieid) AS moviesActedIn
+        FROM actorsmovies
+        JOIN actors ON (actors.id = actorsmovies.actorid)
+        GROUP BY actorid
+        ORDER BY moviesActedIn ${order}
     `;
 
-    let result = await query(addBlockRole, userId);
+    let result = await query(selectGroupBy);
     console.log(result);
 };

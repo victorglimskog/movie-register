@@ -63,6 +63,10 @@ module.exports = class RestSql {
         this.method = method;
         this.idColName = this.settings.idMap[this.table] || 'id';
     }
+<<<<<<< HEAD
+=======
+
+>>>>>>> 717e8fbcb4ddf5162b433ed1b87858c211bc77ea
     async get() {
         // Query with or without ID
         let result = await this.query(
@@ -86,8 +90,13 @@ module.exports = class RestSql {
     async post() {
         let result;
 
+<<<<<<< HEAD
         // tables with versions
         if (this.table == 'descriptions' || this.table == 'directors' || this.table == 'actors') {
+=======
+        //tables with versions
+        if (this.table == "descriptions" || this.table == "directors" || this.table == "actors") {
+>>>>>>> 717e8fbcb4ddf5162b433ed1b87858c211bc77ea
             this.req.body.movieid ? this.id = this.req.body.movieid : {};
             // if there is an id, its an update of an post
             if (this.id) {
@@ -125,8 +134,13 @@ module.exports = class RestSql {
             // run query with or without id
             result = await this.query(query, [this.req.body, this.id]);
             // If we get an error from MySQL
+<<<<<<< HEAD
             if (result.constructor === Error) {
                 this.res.status(500);
+=======
+            if (result.constructor === Error){
+            this.res.status(500);
+>>>>>>> 717e8fbcb4ddf5162b433ed1b87858c211bc77ea
             }
         }
         // return the result
