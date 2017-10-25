@@ -38,7 +38,7 @@ app.use(RestSql.start({
     },
     baseUrl: '/restapi',
     idMap: {
-        descriptions: "movieid"
+        descriptions: 'movieid',
     },
     runtimeErrors: false,
 }));

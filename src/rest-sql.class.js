@@ -87,8 +87,8 @@ module.exports = class RestSql {
     async post() {
         let result;
 
-        //tables with versions
-        if (this.table == "descriptions" || this.table == "directors" || this.table == "actors") {
+        // tables with versions
+        if (this.table == 'descriptions' || this.table == 'directors' || this.table == 'actors') {
             this.req.body.movieid ? this.id = this.req.body.movieid : {};
             // if there is an id, its an update of an post
             if (this.id) {
@@ -103,33 +103,32 @@ module.exports = class RestSql {
                 let vals = Object.values(props);
 
                 let query = `INSERT INTO ${this.table} SET
-                    vnumber = IFNULL((SELECT MAX(vnumber) + 1 FROM ${this.table} AS ac WHERE ${this.idColName} = ${this.id}), 1)`
+                    vnumber = IFNULL((SELECT MAX(vnumber) + 1 FROM ${this.table} AS ac WHERE ${this.idColName} = ${this.id}), 1)`;
 
-                for(let key of keys) {
+                for (let key of keys) {
                     query += `, ${key} = ?`;
                 }
 
                 result = await this.query(query, vals);
+            } else {
+                // if not, make an auto-incremented id and version number 1
+                result = await this.query(
+                    `INSERT INTO ${this.table} SET
+                    id = IFNULL((SELECT MAX(id) + 1 FROM ${this.table} AS tb), 1),
+                    vnumber = 1,
+                    ?`,
+                    this.req.body
+                );
             }
-            // if not, make an auto-incremented id and version number 1
-            else {
-               result = await this.query(`INSERT INTO ${this.table} SET
-                   id = IFNULL((SELECT MAX(id) + 1 FROM ${this.table} AS tb), 1),
-                   vnumber = 1,
-                   ?`,
-                   this.req.body,
-               );
-           }
-       }
-       else {
+        } else {
             let query = 'INSERT INTO ' + '`' + this.table + '` SET ? ';
             // Log the query in the console before we run it
             console.log('query', query, [this.req.body, this.id]);
             // run query with or without id
             result = await this.query(query, [this.req.body, this.id]);
             // If we get an error from MySQL
-            if (result.constructor === Error){
-            this.res.status(500);
+            if (result.constructor === Error) {
+                this.res.status(500);
             }
         }
         // return the result
