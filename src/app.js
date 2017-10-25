@@ -46,4 +46,5 @@ app.listen(3000, () => {
 // createData();
 // highestRankedMovie();
 // blockUser(userToBlockId);
-// searchMovies("Mutant", 5);	// searchstring / limit
+// searchMovies("Mutant", 5);   // searchstring / limit
+// actorActivity(mostActive || leastActive);
