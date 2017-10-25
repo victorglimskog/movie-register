@@ -65,7 +65,6 @@ module.exports = class RestSql {
         this.idColName = this.settings.idMap[this.table] || 'id';
     }
 
-<<<<<<< Updated upstream
     async get() {
         // Query with or without ID
         let result = await this.query(
@@ -110,10 +109,5 @@ module.exports = class RestSql {
 
         // return the result
         this.res.json(result);
-=======
-    async delete() {
-        const result = await this.query();
-        return result;
->>>>>>> Stashed changes
     }
 };
