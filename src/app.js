@@ -8,6 +8,7 @@ const createData = require('./createData');
 
 // queries
 const highestRankedMovie = require('./queries/highestRankedMovie');
+const lowestRankedMovie = require('./queries/lowestRankedMovie');
 const searchMovies = require('./queries/searchMovies');
 const blockUser = require('./queries/blockUser');
 
@@ -47,5 +48,6 @@ app.listen(3000, () => {
 
 // createData();
 // highestRankedMovie();
+// lowestRankedMovie();
 // blockUser(userToBlockId);
-// searchMovies("Mutant", 5);	// searchstring / limit
+// searchMovies("Mutant", 5); // searchstring / limit
