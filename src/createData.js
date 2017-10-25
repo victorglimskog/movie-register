@@ -249,7 +249,7 @@ function createPerson() {
         names = {
             firstname: randomItem(firstNames),
             lastname: randomItem(lastNames),
-        }
+        };
     } while (createdPeople.indexOf(names.firstname + names.lastname) >= 0);
 
     createdPeople.push(names.fistname + names.lastname);
@@ -410,7 +410,7 @@ module.exports = async () => {
     // Create views we need in db
     // View totalscores is needed to get
     // highest and lowest ranked movie by reviews score
-    (async function() {
+    await (async function() {
         const viewTotalScores = `
             CREATE VIEW totalscores AS
                 SELECT m.title, SUM(r.score) as total
@@ -419,8 +419,25 @@ module.exports = async () => {
                 GROUP BY m.title
                 ORDER BY total desc;
         `;
+
         await query(viewTotalScores);
     })();
+
+    // View totalMoviesActedIn is needed to get
+    // most and least active actor
+    await (async function() {
+        const viewTotalMoviesActedIn = `
+            CREATE VIEW totalmoviesactedin AS
+                SELECT actorid, firstname, lastname, COUNT(movieid) AS moviesactedin
+                FROM actorsmovies
+                JOIN actors ON (id = actorid)
+                GROUP BY actorid
+                ORDER BY moviesactedin DESC
+        `;
+
+        await query(viewTotalMoviesActedIn);
+    })();
+
     // exit node process in terminal
     process.exit();
 };

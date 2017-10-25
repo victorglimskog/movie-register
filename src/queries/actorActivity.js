@@ -1,16 +1,28 @@
 const query = require('../query');
 
-module.exports = async function(activity) {
-    let order = activity !== 'leastActive' ? 'ASC' : 'DESC';
+module.exports = async function(mostOrLeast) {
+    let actorsActivity;
 
-    let selectGroupBy = `
-        SELECT actorid, firstname, lastname, COUNT(movieid) AS moviesActedIn
-        FROM actorsmovies
-        JOIN actors ON (actors.id = actorsmovies.actorid)
-        GROUP BY actorid
-        ORDER BY moviesActedIn ${order}
-    `;
+    if (mostOrLeast === 'most' || mostOrLeast === 'least') {
+        let maxOrMin = mostOrLeast === 'most' ? 'MAX' : 'MIN';
 
-    let result = await query(selectGroupBy);
-    console.log(result);
+        actorsActivity = `
+            SELECT actorid, firstname, lastname, moviesActedIn
+            FROM totalmoviesactedin
+            WHERE moviesActedIn =
+                (SELECT ${maxOrMin}(moviesActedIn) FROM totalmoviesactedin)
+        `;
+    } else if (mostOrLeast === undefined) {
+        actorsActivity = `
+            SELECT actorid, firstname, lastname, COUNT(movieid) AS moviesActedIn
+            FROM actorsmovies
+            JOIN actors ON (actors.id = actorsmovies.actorid)
+            GROUP BY actorid
+            ORDER BY moviesActedIn DESC
+        `;
+    } else {
+        throw new Error('The input to the function actorActivity() is not a valid input!');
+    }
+
+    return result = await query(actorsActivity);
 };

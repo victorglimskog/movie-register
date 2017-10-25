@@ -54,4 +54,4 @@ app.listen(3000, () => {
 // lowestRankedMovie();
 // blockUser(userToBlockId);
 // searchMovies("Mutant", 5);   // searchstring / limit
-// actorActivity('leastActive'); // if no inparam you get the most active (otherwise give the function 'leastActive')
+// actorActivity(); // takes inparams 'most' or 'least' for most active actors and least avtive actors, if no inparams you get them all in order of activity
