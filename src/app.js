@@ -12,6 +12,7 @@ const lowestRankedMovie = require('./queries/lowestRankedMovie');
 const searchMovies = require('./queries/searchMovies');
 const blockUser = require('./queries/blockUser');
 const actorActivity = require('./queries/actorActivity');
+const actorRating = require('./queries/actorRating');
 
 const auth = require('./auth/auth');
 
@@ -53,5 +54,6 @@ app.listen(3000, () => {
 // highestRankedMovie();
 // lowestRankedMovie();
 // blockUser(userToBlockId);
-// searchMovies("harrison", 5);   // searchstring / callback limit of movies 
+// searchMovies("harrison", 5);   // searchstring / callback limit of movies
 // actorActivity(); // takes inparams 'most' or 'least' for most active actors and least avtive actors, if no inparams you get them all in order of activity
+// actorRating();

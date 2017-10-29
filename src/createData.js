@@ -412,11 +412,11 @@ module.exports = async () => {
     // highest and lowest ranked movie by reviews score
     await (async function() {
         const viewTotalScores = `
-            CREATE VIEW totalscores AS
-                SELECT m.title, SUM(r.score) as total
+            CREATE VIEW averagescores AS
+                SELECT m.id, m.title, AVG(r.score) as total
                 FROM movies as m, reviews as r
                 WHERE m.id = r.movieid
-                GROUP BY m.title
+                GROUP BY m.id
                 ORDER BY total desc;
         `;
 
