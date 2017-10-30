@@ -2,10 +2,10 @@ const query = require('../query');
 
 module.exports = async () => {
     const q = `
-        SELECT year, title, total as totalScore
-        FROM totalscores
-        WHERE total =
-            (SELECT MAX(total) FROM totalscores)
+        SELECT title, average as averagescore
+        FROM averagescores
+        WHERE average =
+            (SELECT MAX(average) FROM averagescores)
     `;
     result = await query(q);
     console.log('Highest ranked movies', result);

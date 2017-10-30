@@ -1,6 +1,6 @@
 const query = require('../query');
 
-module.exports = async function(mostOrLeast) {
+module.exports = async function(mostOrLeast = null) {
     let actorsActivity;
 
     if (mostOrLeast === 'most' || mostOrLeast === 'least') {
@@ -12,7 +12,7 @@ module.exports = async function(mostOrLeast) {
             WHERE moviesActedIn =
                 (SELECT ${maxOrMin}(moviesActedIn) FROM totalmoviesactedin)
         `;
-    } else if (mostOrLeast === undefined) {
+    } else if (mostOrLeast === null) {
         actorsActivity = `
             SELECT actorid, firstname, lastname, COUNT(movieid) AS moviesActedIn
             FROM actorsmovies
@@ -24,5 +24,7 @@ module.exports = async function(mostOrLeast) {
         throw new Error('The input to the function actorActivity() is not a valid input!');
     }
 
-    return result = await query(actorsActivity);
+    let result = await query(actorsActivity);
+    console.log(result);
+    return result;
 };

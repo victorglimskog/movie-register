@@ -51,9 +51,18 @@ app.listen(3000, () => {
 });
 
 // createData();
+
 // highestRankedMovie();
 // lowestRankedMovie();
-// blockUser(userToBlockId);
-// searchMovies("harrison", 5);   // searchstring / callback limit of movies
-// actorActivity(); // takes inparams 'most' or 'least' for most active actors and least avtive actors, if no inparams you get them all in order of activity
+
+// Takes the users id that should be blocked as inparams.
+// blockUser('userId');
+
+// searchstring / callback limit of movies
+// searchMovies("harrison", 5);
+
+// takes inparams 'most' or 'least' for most active actors and least avtive actors, if no inparams you get them all in order of activity
+// actorActivity();
+
+// Does not take any inparams at this moment
 // actorRating();

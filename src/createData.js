@@ -410,17 +410,33 @@ module.exports = async () => {
     // Create views we need in db
     // View totalscores is needed to get
     // highest and lowest ranked movie by reviews score
+    // await (async function() {
+    //     const viewTotalScores = `
+    //         CREATE VIEW totalscores AS
+    //             SELECT m.id, m.title, SUM(r.score) as total
+    //             FROM movies as m, reviews as r
+    //             WHERE m.id = r.movieid
+    //             GROUP BY m.id
+    //             ORDER BY total desc;
+    //     `;
+
+    //     await query(viewTotalScores);
+    // })();
+
+    // Create views we need in db
+    // View averagescores is needed to get
+    // highest and lowest ranked actor by reviews score
     await (async function() {
-        const viewTotalScores = `
+        const viewAverageScores = `
             CREATE VIEW averagescores AS
-                SELECT m.id, m.title, AVG(r.score) as total
+                SELECT m.id, m.title, AVG(r.score) as average
                 FROM movies as m, reviews as r
                 WHERE m.id = r.movieid
                 GROUP BY m.id
-                ORDER BY total desc;
+                ORDER BY average desc;
         `;
 
-        await query(viewTotalScores);
+        await query(viewAverageScores);
     })();
 
     // View totalMoviesActedIn is needed to get
