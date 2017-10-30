@@ -18,6 +18,11 @@ module.exports = class RestSql {
                 },
             },
         );
+
+        if (this.settings.runtimeErrors) {
+            // if runetime error
+            console.log('Error: ', this.settings.runtimeErrors);
+        }
     }
 
     async query(q, params) {
@@ -62,29 +67,73 @@ module.exports = class RestSql {
     async get() {
         // Query with or without ID
         let result = await this.query(
-          'SELECT * FROM `' + this.table + '`' + (this.id ? ' WHERE ' + this.title + ' =?' : ''),
-          [this.id]
+            'SELECT * FROM `' + this.table + '`' + (this.id ? ' WHERE ' + this.title + ' =?' : ''),
+            [this.id]
         );
 
-       // If error
+        // If error
         if (result.constructor === Error) {
-          this.res.status(500);
+            this.res.status(500);
+        } else if (this.id && result.length === 0) {
+            this.res.status(500);
+            return;
+        } else if (this.id) {
+            result = result[0];
         }
-
-        // No post with a id could be found
-        else if (this.id && result.length === 0) {
-          this.res.status(500);
-          return;
-        }
-
-
-        // From array to object
-        else if(this.id) {
-          result = result[0];
-        }
-
-       // Return the reslut
         this.res.json(result);
+    }
+
+
+    async post() {
+        let result;
+
+        // tables with versions
+        if (this.table == 'descriptions' || this.table == 'directors' || this.table == 'actors') {
+            this.req.body.movieid ? this.id = this.req.body.movieid : {};
+            // if there is an id, its an update of an post
+            if (this.id) {
+                let post = (await this.query(`SELECT * FROM ${this.table} WHERE ${this.idColName} = ${this.id}`))[0];
+
+                delete post.movieid;
+                delete post.vnumber;
+                delete post.timestamp;
+
+                let props = Object.assign({}, post, this.req.body);
+                let keys = Object.keys(props);
+                let vals = Object.values(props);
+
+                let query = `INSERT INTO ${this.table} SET
+                    vnumber = IFNULL((SELECT MAX(vnumber) + 1 FROM ${this.table} AS ac WHERE ${this.idColName} = ${this.id}), 1)`;
+
+                for (let key of keys) {
+                    query += `, ${key} = ?`;
+                }
+
+                result = await this.query(query, vals);
+            } else {
+                // if not, make an auto-incremented id and version number 1
+                result = await this.query(
+                    `INSERT INTO ${this.table} SET
+                    id = IFNULL((SELECT MAX(id) + 1 FROM ${this.table} AS tb), 1),
+                    vnumber = 1,
+                    ?`,
+                    this.req.body
+                );
+            }
+        } else {
+            let query = 'INSERT INTO ' + '`' + this.table + '` SET ? ';
+            // Log the query in the console before we run it
+            console.log('query', query, [this.req.body, this.id]);
+            // run query with or without id
+            result = await this.query(query, [this.req.body, this.id]);
+            // If we get an error from MySQL
+            if (result.constructor === Error) {
+                this.res.status(500);
+            }
+        }
+        // return the result
+        this.res.json(result);
+<<<<<<< HEAD
       }
 
   
@@ -145,4 +194,12 @@ module.exports = class RestSql {
         this.res.json(result);
     }
 };
+=======
+    }
+>>>>>>> 4c7f4ca4885d3ed9e23344251046b4622815e1b5
 
+    async delete() {
+        const result = await this.query();
+        return result;
+    }
+};
