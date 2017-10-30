@@ -4,15 +4,15 @@ const RestSql = require('./rest-sql.class');
 const bodyParser = require('body-parser');
 const session = require('express-session');
 const Loginhandler = require('./auth/loginhandler.class');
-const createData = require('./createData');
 
-// queries
-const highestRankedMovie = require('./queries/highestRankedMovie');
-const lowestRankedMovie = require('./queries/lowestRankedMovie');
-const searchMovies = require('./queries/searchMovies');
-const blockUser = require('./queries/blockUser');
-const actorActivity = require('./queries/actorActivity');
-const actorRating = require('./queries/actorRating');
+const createData = require('./createData'); // eslint-disable-line
+
+const highestRankedMovie = require('./queries/highestRankedMovie'); // eslint-disable-line
+const lowestRankedMovie = require('./queries/lowestRankedMovie'); // eslint-disable-line
+const searchMovies = require('./queries/searchMovies'); // eslint-disable-line
+const blockUser = require('./queries/blockUser'); // eslint-disable-line
+const actorActivity = require('./queries/actorActivity'); // eslint-disable-line
+const actorRating = require('./queries/actorRating'); // eslint-disable-line
 
 const auth = require('./auth/auth');
 

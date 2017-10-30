@@ -131,7 +131,7 @@ let movieFirstPart = [
     'Return of the',
     'Back to the',
     'The remains of the',
-    'The small',
+    'Small',
     'Dangerous',
     'Scary',
 ];
@@ -151,6 +151,7 @@ let movieSecondPart = [
     'Blue',
     'Thick',
     'Colossal',
+    'Tired',
 ];
 
 let movieLastPart = [
