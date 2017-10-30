@@ -67,7 +67,7 @@ module.exports = class RestSql {
     async get() {
         // Query with or without ID
         let result = await this.query(
-            'SELECT * FROM `' + this.table + '`' + (this.id ? ' WHERE ' + this.title + ' =?' : ''),
+            'SELECT * FROM `' + this.table + '`' + (this.id ? ' WHERE ' + this.idColName + ' =?' : ''),
             [this.id]
         );
 
@@ -133,73 +133,28 @@ module.exports = class RestSql {
         }
         // return the result
         this.res.json(result);
-<<<<<<< HEAD
-      }
-
-  
-	async post(){
-    
-		// convert iso date strings like "2017-10-05T11:42:46.169Z" to mysql compatible date string
-		for(let col in this.req.body){
-			let val = this.req.body[col];
-			if(val.indexOf('T') == 10 && val.indexOf('Z') == val.length-1){
-				this.req.body[col] = dateFormat(val, "yyyy-mm-dd hh:MM:ss"); // "%Y-%m-%d %H:%M:%S"
-			}
-		}
-
-		let query = 'INSERT INTO ' + '`' + this.table + '` SET ? ';
-	
-		// Log the query in the console before we run it
-		console.log('query', query, [this.req.body, this.id]);
-
-		// run query with or without id
-		let result = await this.query(query, [this.req.body, this.id]);
-
-		// If we get an error from MySQL
-		if(result.constructor === Error){
-			this.res.status(500);
-		}
-
-		// return the result
-		this.res.json(result);
-	
-	}
+    }
 
     async delete() {
-
         // Remove items
-        let remove = await this.query( 
-            'DELETE FROM' + this.table + '`' + (this.id ? ' WHERE' + this.title + ' =?' : ''),
+        let result = await this.query(
+            'DELETE FROM ' + this.table + (this.id ? ' WHERE ' + this.idColName + ' = ?' : ''),
             [this.id]
         );
 
         // If error
         if (result.constructor === Error) {
-          this.res.status(500);
-        }
-
+            this.res.status(500);
+        } else if (this.id && result.length === 0) {
         // No post with a id could be found
-        else if (this.id && result.length === 0) {
-          this.res.status(500);
-          return;
-        }
-
-
+            this.res.status(500);
+            return;
+        } else if (this.id) {
         // From array to object
-        else if(this.id) {
-          result = result[0];
+            result = result[0];
         }
 
-       // Return the reslut
+        // Return the reslut
         this.res.json(result);
-    }
-};
-=======
-    }
->>>>>>> 4c7f4ca4885d3ed9e23344251046b4622815e1b5
-
-    async delete() {
-        const result = await this.query();
-        return result;
     }
 };
